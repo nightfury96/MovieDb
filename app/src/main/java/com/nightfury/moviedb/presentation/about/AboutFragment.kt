@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.nightfury.moviedb.databinding.FragmentAboutBinding
 
 class AboutFragment : Fragment() {
@@ -18,15 +17,8 @@ class AboutFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val aboutViewModel = ViewModelProvider(this)[AboutViewModel::class.java]
-
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        aboutViewModel.text.observe(viewLifecycleOwner) {
-            binding.aboutTV.text = it
-        }
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {

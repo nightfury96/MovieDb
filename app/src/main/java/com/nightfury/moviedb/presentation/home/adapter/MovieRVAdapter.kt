@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.nightfury.moviedb.BuildConfig
 import com.nightfury.moviedb.data.models.Movie
 import com.nightfury.moviedb.databinding.MovieViewItemBinding

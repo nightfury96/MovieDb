@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nightfury.moviedb.databinding.FragmentHomeBinding
 import com.nightfury.moviedb.presentation.home.adapter.MovieRVAdapter
+import com.nightfury.moviedb.presentation.util.gone
+import com.nightfury.moviedb.presentation.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,12 +47,30 @@ class HomeFragment : Fragment() {
             homeViewModel.movies.collectLatest {
                 movieRVAdapter.submitData(it)
             }
-
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieRVAdapter.loadStateFlow.collectLatest { loadStates ->
+                val isListEmpty =
+                    loadStates.refresh is LoadState.NotLoading && movieRVAdapter.itemCount == 0
+                val isLoading = loadStates.source.refresh is LoadState.Loading
+                if (isListEmpty) {
+                    binding.movieListRV.gone()
+                    binding.movieLoadingPB.gone()
+                    binding.movieEmptyTV.visible()
+                } else if (isLoading) {
+                    binding.movieListRV.visible()
+                    binding.movieEmptyTV.gone()
+                    binding.movieLoadingPB.visible()
+                } else {
+                    binding.movieListRV.visible()
+                    binding.movieEmptyTV.gone()
+                    binding.movieLoadingPB.gone()
+                }
+            }
         }
     }
 
     private fun initRecyclerView() {
-
         binding.movieListRV.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)

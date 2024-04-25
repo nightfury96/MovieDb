@@ -14,7 +14,13 @@ class MovieRepositoryImpl
 constructor(
     private val api: DiscoverApi
 ) : MovieRepository {
-    override fun getAllMovies(): Flow<PagingData<Movie>> = Pager(PagingConfig(1)) {
-        MoviePagingSource(api)
-    }.flow
+    override fun getAllMovies(date: String): Flow<PagingData<Movie>> =
+        Pager(PagingConfig(1)) {
+            MoviePagingSource(api, date)
+        }.flow
+
+    override fun getSearchedMovies(query: String): Flow<PagingData<Movie>> =
+        Pager(PagingConfig(1)) {
+            MoviePagingSource(api, query = query)
+        }.flow
 }

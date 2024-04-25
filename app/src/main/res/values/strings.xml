@@ -3,6 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_about">About</string>
     <string name="movie_empty">No movies to show</string>
+    <string name="search_menu_item">Search Title</string>
     <string name="app_info">This is a sample Android project showcasing the implementation of an Android application using Clean Architecture, MVVM design pattern, Hilt for dependency injection, Retrofit for API communication, and the Navigation Component for seamless navigation between screens.
 \nThe application fetches data from the TMDB API.
 \n\n## Features

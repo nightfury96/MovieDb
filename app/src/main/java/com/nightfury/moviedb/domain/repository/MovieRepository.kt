@@ -5,5 +5,6 @@ import com.nightfury.moviedb.data.models.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    fun getAllMovies(): Flow<PagingData<Movie>>
+    fun getAllMovies(date: String): Flow<PagingData<Movie>>
+    fun getSearchedMovies(query: String): Flow<PagingData<Movie>>
 }

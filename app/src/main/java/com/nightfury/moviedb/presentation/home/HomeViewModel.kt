@@ -1,5 +1,6 @@
 package com.nightfury.moviedb.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -19,15 +20,22 @@ constructor(
 
     private var _movies = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
     val movies get() = _movies
-
-    init {
-        getAllMovies()
+    fun getAllMovies(date: String) {
+        Log.d("HomeViewModel", "loading movies withing last month $date")
+        viewModelScope.launch {
+            _movies.emit(PagingData.empty())
+            repository
+                .getAllMovies(date)
+                .cachedIn(viewModelScope)
+                .collect { _movies.value = it }
+        }
     }
 
-    private fun getAllMovies() {
+    fun getSearchedMovie(query: String) {
         viewModelScope.launch {
+            _movies.emit(PagingData.empty())
             repository
-                .getAllMovies()
+                .getSearchedMovies(query)
                 .cachedIn(viewModelScope)
                 .collect { _movies.value = it }
         }

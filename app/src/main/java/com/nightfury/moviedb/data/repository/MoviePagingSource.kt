@@ -14,6 +14,8 @@ class MoviePagingSource
 @Inject
 constructor(
     private val api: DiscoverApi,
+    private val date: String = "",
+    private val query: String = "",
     private val apiKey: String = BuildConfig.API_KEY
 ) : PagingSource<Int, Movie>() {
 
@@ -29,7 +31,11 @@ constructor(
             val page = params.key ?: 1
             val movieList: List<Movie> =
                 try {
-                    val response = api.getAllMovies(apiKey, page)
+                    val response = if (query.isBlank()) {
+                        api.getAllMovies(apiKey, page, date)
+                    } else {
+                        api.getSearchedMovies(apiKey, page, query)
+                    }
                     response.body()?.results ?: emptyList()
                 } catch (e: Exception) {
                     e.printStackTrace()

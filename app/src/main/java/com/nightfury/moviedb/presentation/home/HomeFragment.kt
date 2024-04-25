@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nightfury.moviedb.R
 import com.nightfury.moviedb.databinding.FragmentHomeBinding
+import com.nightfury.moviedb.presentation.SharedViewModel
 import com.nightfury.moviedb.presentation.home.adapter.MovieRVAdapter
 import com.nightfury.moviedb.presentation.util.DateUtil
 import com.nightfury.moviedb.presentation.util.gone
@@ -34,6 +36,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var movieRVAdapter: MovieRVAdapter
 
@@ -51,6 +54,22 @@ class HomeFragment : Fragment() {
         initRecyclerView()
         bindRV()
         initMenu()
+        bindReselect()
+    }
+
+    private fun bindReselect() {
+        sharedViewModel.setHomeReselected(false)
+        sharedViewModel.isHomeReselected().observe(viewLifecycleOwner) {
+            if (it) {
+                if ((binding.movieListRV.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition() == 0) {
+                    if (!homeViewModel.isSearchMode) {
+                        homeViewModel.getAllMovies(DateUtil.getPrevMonthDate())
+                    }
+                } else {
+                    binding.movieListRV.scrollToPosition(0)
+                }
+            }
+        }
     }
 
     private fun initMenu() {

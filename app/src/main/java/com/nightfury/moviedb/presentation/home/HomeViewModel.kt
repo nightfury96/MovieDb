@@ -1,13 +1,35 @@
 package com.nightfury.moviedb.presentation.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.nightfury.moviedb.data.models.Movie
+import com.nightfury.moviedb.domain.repository.MovieRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject
+constructor(
+    private val repository: MovieRepository
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private var _movies = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
+    val movies get() = _movies
+
+    init {
+        getAllMovies()
     }
-    val text: LiveData<String> = _text
+
+    private fun getAllMovies() {
+        viewModelScope.launch {
+            repository
+                .getAllMovies()
+                .cachedIn(viewModelScope)
+                .collect { _movies.value = it }
+        }
+    }
 }

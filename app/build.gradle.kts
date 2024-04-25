@@ -17,6 +17,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_KEY", "\"4df0596cc63f2919ad5ba55a0bdff130\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+        buildConfigField("String", "BASE_POSTER_URL", "\"https://image.tmdb.org/t/p/w342\"")
     }
 
     buildTypes {
@@ -37,10 +41,13 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    val hilt_version = "2.51.1"
+    val retrofit_version = "2.11.0"
 
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -52,8 +59,20 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14")
+
+    val paging_version = "3.2.1"
+    implementation("androidx.paging:paging-runtime:$paging_version")
+
+    val glide_version = "4.16.0"
+    implementation("com.github.bumptech.glide:glide:$glide_version")
+    kapt("com.github.bumptech.glide:compiler:$glide_version")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

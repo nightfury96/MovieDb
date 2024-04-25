@@ -46,9 +46,6 @@ android {
 }
 
 dependencies {
-    val hilt_version = "2.51.1"
-    val retrofit_version = "2.11.0"
-
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -59,10 +56,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
 
     //Hilt
+    val hilt_version = "2.51.1"
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 
     //Retrofit
+    val retrofit_version = "2.11.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14")
@@ -70,6 +69,7 @@ dependencies {
     val paging_version = "3.2.1"
     implementation("androidx.paging:paging-runtime:$paging_version")
 
+    //Glide
     val glide_version = "4.16.0"
     implementation("com.github.bumptech.glide:glide:$glide_version")
     kapt("com.github.bumptech.glide:compiler:$glide_version")

@@ -77,7 +77,9 @@ class HomeFragment : Fragment() {
                     }
 
                     override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                        homeViewModel.getAllMovies(DateUtil.getPrevMonthDate())
+                        if (homeViewModel.isSearchMode) {
+                            homeViewModel.getAllMovies(DateUtil.getPrevMonthDate())
+                        }
                         hideKeyboard(searchView)
                         return true
                     }
@@ -108,6 +110,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun bindRV() {
+        if (homeViewModel.isSearchMode) {
+            homeViewModel.getAllMovies(DateUtil.getPrevMonthDate())
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.movies.collectLatest {
                 movieRVAdapter.submitData(it)

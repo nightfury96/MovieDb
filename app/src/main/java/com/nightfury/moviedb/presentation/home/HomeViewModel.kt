@@ -18,9 +18,11 @@ constructor(
     private val repository: MovieRepository
 ) : ViewModel() {
 
+    var isSearchMode = false
     private var _movies = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
     val movies get() = _movies
     fun getAllMovies(date: String) {
+        isSearchMode = false
         Log.d("HomeViewModel", "loading movies withing last month $date")
         viewModelScope.launch {
             _movies.emit(PagingData.empty())
@@ -32,6 +34,7 @@ constructor(
     }
 
     fun getSearchedMovie(query: String) {
+        isSearchMode = query.isNotBlank()
         viewModelScope.launch {
             _movies.emit(PagingData.empty())
             repository
